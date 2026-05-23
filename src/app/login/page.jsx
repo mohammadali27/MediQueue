@@ -1,5 +1,6 @@
 "use client";
 import { Check } from "@gravity-ui/icons";
+import { ToastContainer, toast } from 'react-toastify';
 import {
   Button,
   Card,
@@ -10,27 +11,33 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
-
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 const LoginPage = () => {
-  const onSubmit =async (e) => {
+  const router = useRouter();
+  const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
     const user = Object.fromEntries(formData.entries());
 
-    const { data, error } = await authClient.signUp.email({
+    const { data, error } = await authClient.signIn.email({
       email: user.email,
       password: user.password,
-      name: user.name,
-      image: user.image,
+      
     });
     if (data) {
-      redirect("/");
+      router.push("/");
     }
-
+    if(error){
+   toast.error("Invalid email or password")
+    }
+    console.log({ data, error });
+  
   };
   return (
     <div>
+      <ToastContainer/>
       <Card className=" items-center p-5 mt-10 mb-10">
         <Form
           className="flex w-96 flex-col gap-4"

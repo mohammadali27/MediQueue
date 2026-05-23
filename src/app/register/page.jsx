@@ -10,47 +10,52 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const RegisterPage = () => {
+  const router = useRouter();
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
     const user = Object.fromEntries(formData.entries());
+    console.log(user);
 
     const { data, error } = await authClient.signUp.email({
       email: user.email,
       password: user.password,
       name: user.name,
-      image: user.image,
+      // image: user.image,
     });
+
     if (data) {
-      redirect("/");
+      router.push("/");
     }
+    console.log({ data, error });
   };
   return (
-    <div>
-      <Card className=" items-center p-5 mt-10 mb-10">
+    <div className="items-center mx-auto p-10">
+      <div className="">
+        <h1 className="font-bold text-2xl text-center my-3">Create Account</h1>
+      </div>
+      <Card className="max-w-7xl mx-auto items-center">
         <Form
           className="flex w-96 flex-col gap-4"
           render={(props) => <form {...props} data-custom="foo" />}
           onSubmit={onSubmit}
         >
-          <TextField
-            isRequired
-            name="name"
-            type="name"
-            validate={(value) => {
-              if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
-                return "Please enter your name";
-              }
-              return null;
-            }}
-          >
+          <TextField isRequired name="name" type="name">
             <Label>Name</Label>
             <Input placeholder="Mohammad Ali" />
             <FieldError />
           </TextField>
+          {/* <TextField isRequired name="image" type="url">
+            <Label>Image uri</Label>
+            <Input placeholder="https//:image" />
+            <FieldError />
+          </TextField> */}
+
           <TextField
             isRequired
             name="email"
@@ -92,13 +97,10 @@ const RegisterPage = () => {
             </Description>
             <FieldError />
           </TextField>
-          <div className="flex gap-2">
-            <Button type="submit">
+          <div className="mt-5 text-center">
+            <Button className="w-full" variant="primary" type="submit">
               <Check />
-              Submit
-            </Button>
-            <Button type="reset" variant="secondary">
-              Reset
+              Create Account
             </Button>
           </div>
         </Form>
