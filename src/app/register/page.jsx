@@ -12,6 +12,7 @@ import {
 } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+// import { FcGoogle } from "react-icons/fc";
 
 const RegisterPage = () => {
   const router = useRouter();
@@ -34,6 +35,11 @@ const RegisterPage = () => {
     }
     console.log({ data, error });
   };
+  // const HandelGoogleSignIn = async () => {
+  //   await authClient.signIn.social({
+  //     provider: "google",
+  //   });
+  // };
   return (
     <div className="items-center mx-auto p-10">
       <div className="">
@@ -103,6 +109,13 @@ const RegisterPage = () => {
               Create Account
             </Button>
           </div>
+          {/* <p className="text-center">Or sign in with </p> */}
+          {/* <div className="text-center">
+            <Button onClick={HandelGoogleSignIn}>
+              <FcGoogle />
+              Sign in with Google
+            </Button>
+          </div> */}
         </Form>
       </Card>
     </div>

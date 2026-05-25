@@ -1,6 +1,6 @@
 "use client";
 import { Check } from "@gravity-ui/icons";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 import {
   Button,
   Card,
@@ -13,6 +13,7 @@ import {
 } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { FcGoogle } from "react-icons/fc";
 const LoginPage = () => {
   const router = useRouter();
   const onSubmit = async (e) => {
@@ -24,20 +25,23 @@ const LoginPage = () => {
     const { data, error } = await authClient.signIn.email({
       email: user.email,
       password: user.password,
-      
     });
     if (data) {
       router.push("/");
     }
-    if(error){
-   toast.error("Invalid email or password")
+    if (error) {
+      toast.error("Invalid email or password");
     }
     console.log({ data, error });
-  
+  };
+  const HandelGoogleSignIn = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+    });
   };
   return (
     <div>
-      <ToastContainer/>
+      <ToastContainer />
       <Card className=" items-center p-5 mt-10 mb-10">
         <Form
           className="flex w-96 flex-col gap-4"
@@ -91,6 +95,10 @@ const LoginPage = () => {
             </Button>
             <Button type="reset" variant="secondary">
               Reset
+            </Button>
+            <Button onClick={HandelGoogleSignIn}>
+              <FcGoogle />
+              Sign in with Google
             </Button>
           </div>
         </Form>

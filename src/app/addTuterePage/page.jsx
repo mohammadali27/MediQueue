@@ -1,4 +1,6 @@
 "use client";
+
+import { authClient } from "@/lib/auth-client";
 import {
   FieldError,
   Input,
@@ -9,15 +11,18 @@ import {
   Card,
 } from "@heroui/react";
 
-import { redirect } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 
 const AddDestilesPage = () => {
+  const { data: session } = authClient.useSession();
   const onSubmit = async (e) => {
     e.preventDefault();
     const formdata = new FormData(e.currentTarget);
 
-    const destnation = Object.fromEntries(formdata.entries());
+    const destnation = {
+      ...Object.fromEntries(formdata.entries()),
+      email: session?.user?.email,
+    };
     console.log(destnation);
     const res = await fetch("http://localhost:8000/datadb", {
       method: "POST",
@@ -38,7 +43,7 @@ const AddDestilesPage = () => {
       <Card>
         <form
           onSubmit={onSubmit}
-          className="p-10 space-y-8 w-3xl space-x-8 gap-5 text-2xl   border-5 border-accent-hover rounded-2xl"
+          className="p-10 space-y-8 max-w-7xl space-x-8 gap-5 text-2xl border-5 border-accent-hover rounded-2xl"
         >
           <h1 className=" text-center mx-auto font-bold text-2xl">
             Add Tutors

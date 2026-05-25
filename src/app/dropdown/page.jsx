@@ -1,21 +1,18 @@
 "use client";
 
-import { Bars, Pencil, SquarePlus, TrashBin } from "@gravity-ui/icons";
+import { Bars,} from "@gravity-ui/icons";
 import {
   Button,
-  Description,
+ 
   Dropdown,
-  Header,
-  Kbd,
-  Label,
-  Separator,
+  
 } from "@heroui/react";
 import Link from "next/link";
 
-export function WithDisabledItems() {
+export function WithDisabledItems({setIsOpen}) {
   return (
     <Dropdown>
-      <Button isIconOnly aria-label="Menu" variant="secondary">
+      <Button onClick={setIsOpen} isIconOnly aria-label="Menu">
         <Bars className="outline-none" />
       </Button>
       <Dropdown.Popover className="min-w-[220px]">

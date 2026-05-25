@@ -1,24 +1,28 @@
 "use client";
 import { WithDisabledItems } from "@/app/dropdown/page";
+import { WithIcons } from "@/app/modeChang/page";
 
 import ProfilePage from "@/app/profile/page";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@heroui/react";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const { data: session, isPending } = authClient.useSession();
   console.log(session);
   return (
-    <div className=" bg-gradient-to-b from-blue-500 to-white ">
+    <div className=" bg-gradient-to-b from-blue-500 to-white fixed top-0 left-0 right-0 z-50">
       <div className="flex justify-between items-center mx-auto p-5 ">
-        <div className=" flex gap-2 items-center">
-          <WithDisabledItems />
+        <div className=" flex gap-2 items-center ">
+          <WithDisabledItems setIsOpen={setIsOpen} />
           <h1 className=" font-bold text-4xl">MediQueue</h1>
         </div>
 
-        <div className="">
+        <div
+          className={`${isOpen ? "flex" : "hidden"} lg:flex gap-4 items-center mx-auto justify-center font-bold relative`}
+        >
           <ul className="flex gap-5 text-2xl">
             <li>
               <Link href={"/"}>Home</Link>
@@ -32,10 +36,10 @@ const Navbar = () => {
                   <Link href={"/addTuterePage"}>Add Tutor</Link>
                 </li>
                 <li>
-                  <Link href={"/"}>My Tutors</Link>
+                  <Link href={"/My-tutor"}>My Tutors</Link>
                 </li>
                 <li>
-                  <Link href={"/"}>My Booked Sessions</Link>{" "}
+                  <Link href={"/my-booking"}>My Booked Sessions</Link>{" "}
                 </li>
               </>
             )}
@@ -45,26 +49,27 @@ const Navbar = () => {
         {!session ? (
           <div className="">
             <ul className="flex gap-3">
-              <Link href={"/login"}>
-                <li>
+              <li>
+                <Link href={"/login"}>
                   <Button>LogIn</Button>
-                </li>
-              </Link>
-              <Link href={"/register"}>
-                <li>
+                </Link>
+              </li>
+              <li>
+                <Link href={"/register"}>
                   <Button>Register</Button>
-                </li>
-              </Link>
+                </Link>
+              </li>
             </ul>
           </div>
         ) : (
           <div className="">
-            <ul>
-              <Link href={"/"}>
-                <li>
-                  <ProfilePage />
-                </li>
-              </Link>
+            <ul className=" flex  items-center gap-3">
+              <li>
+                <ProfilePage session={session} />
+              </li>
+              <li>
+                <WithIcons />
+              </li>
             </ul>
           </div>
         )}

@@ -1,16 +1,34 @@
-import { Button, Card } from "@heroui/react";
+"use client";
+
+import { useEffect, useState } from "react";
+import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
+import { Button, Card } from "@heroui/react";
 import Link from "next/link";
-import React from "react";
 import { FaExternalLinkAlt } from "react-icons/fa";
 
-const CorsesPage = async ({ _id }) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/home-datadb`);
-  const data = (await res.json()) || [];
-  console.log(data);
+const MyTutor = () => {
+  const { data: session } = authClient.useSession();
+  const [tutors, setTutors] = useState([]);
+
+  useEffect(() => {
+    const email = session?.user?.email;
+
+    if (!email) return;
+
+    const fetchData = async () => {
+      const res = await fetch(`http://localhost:8000/datadb?email=${email}`);
+
+      const mydata = await res.json();
+      setTutors(mydata || []);
+    };
+
+    fetchData();
+  }, [session]);
+
   return (
     <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1  mt-10 mb-5 container mx-auto gap-5 items-center justify-between">
-      {data?.map((d) => (
+      {tutors?.map((d) => (
         <div key={d?._id}>
           <div className=" flex">
             <Card className="w-[500px] gap-2">
@@ -32,13 +50,8 @@ const CorsesPage = async ({ _id }) => {
           </div>
         </div>
       ))}
-      <div className="">
-        <Link href={"/tutors"}>
-          <Button className={""}>All Tutors</Button>
-        </Link>
-      </div>
     </div>
   );
 };
 
-export default CorsesPage;
+export default MyTutor;

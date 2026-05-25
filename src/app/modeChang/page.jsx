@@ -2,10 +2,7 @@
 import { Moon, Sun } from "@gravity-ui/icons";
 import { Switch } from "@heroui/react";
 
-
-
 export function WithIcons() {
-   
   const icons = {
     darkMode: {
       off: Moon,
@@ -13,7 +10,7 @@ export function WithIcons() {
       selectedControlClass: "",
     },
   };
-  return ( 
+  return (
     <div className="flex gap-3">
       {Object.entries(icons).map(([key, value]) => (
         <Switch key={key} defaultSelected size="lg">
